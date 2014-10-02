@@ -37,12 +37,34 @@ public class Tile {
 		}
 	}
 	
+	public String printCoord() {
+		return ("(" + x + "," + y + ")");
+	}
+	
 	public int getX() {
 		return x;
 	}
 	
 	public int getY() {
 		return y;
+	}
+	
+	public boolean isEqual(Tile t) {
+		return (this.x == t.getX() && this.y == t.getX());
+	}
+	
+	public String drawDir(Tile t) {
+		if (t.getY() > this.y) {
+			return "^";
+		} else if (t.getX() > this.x) {
+			return "<";
+		} else if (t.getY() <  this.x) {
+			return "v";
+		} else if (t.getX() < this.x) {
+			return ">";
+		} else {
+			return ".";
+		}
 	}
 	
 
