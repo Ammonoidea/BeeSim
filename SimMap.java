@@ -2,6 +2,7 @@ package beeSim;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Random;
 import java.util.Stack;
 
 public class SimMap {
@@ -19,6 +20,24 @@ public class SimMap {
 	
 	public void addUnit(int x, int y, Unit u) {
 		grid[x][y].addUnit(u);
+	}
+	
+	public void addImpassables() {
+		Random r = new Random();
+		for (Tile[] tArry: grid) {
+			for (Tile t : tArry) {
+//				if (r.nextInt(10) < 1) {
+//					t.setPassability(false);
+//				}
+				if (t.getX() > grid[0].length/3 && (t.getY() < 5 || t.getY() > grid.length - 5) && t.getX() < (grid[0].length - grid[0].length/3)) {
+					t.setPassability(false);
+				}
+				
+				if (t.getY() > 1 && t.getX() == 2) {
+					t.setPassability(false);
+				}
+			}
+		}
 	}
 	
 	public String toString () {
@@ -92,25 +111,38 @@ public class SimMap {
 		return sb.toString();
 	}
 
+	public String getPath(Tile start, Tile goal, Bee b) {
+		Stack<Tile> path = b.breadthFirstSearchPath(start, goal);
+		StringBuilder sb;
+		if (path.size() > 2) {
+			Tile t = path.pop();
+			sb = new StringBuilder();
+			sb.append(t.printCoord());
+			sb.append(",");
+			while (!path.empty()) {
+				t = path.pop();
+				sb.append(t.printCoord());
+				sb.append(",");
+			}
+			return sb.toString();
+		} else {
+			return "No path found.";
+		}
+	}
+	
 	public static void main(String[] args) {
 		SimMap s = new SimMap(10, 10);
+		s.addImpassables();
 		Bee b = new Bee(s);
 		Hive h = new Hive();
 		s.addUnit(0, 0, b);
 		s.addUnit(2,2,h);
+		Tile start = s.getGrid()[0][0];
+		Tile goal = s.getGrid()[7][8];
 		
-		System.out.println(s.drawDepthFirstSearch(b.breadthFirstSearch(s.getGrid()[0][0], s.getGrid()[7][8]), s.getGrid()[0][0], s.getGrid()[7][8]));
-		Stack<Tile> path = b.breadthFirstSearchPath(s.getGrid()[0][0], s.getGrid()[7][8]);
-		Tile t = path.pop();
-		StringBuilder sb = new StringBuilder();
-		sb.append(t.printCoord());
-		sb.append(",");
-		while (!path.empty()) {
-			t = path.pop();
-			sb.append(t.printCoord());
-			sb.append(",");
-		}
-		System.out.println(sb.toString());
+		System.out.println(s.drawDepthFirstSearch(b.breadthFirstSearch(start, goal), start, goal));
+		System.out.println(s.getPath(start, goal, b));
+		
 			
 	}
 

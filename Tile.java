@@ -21,7 +21,16 @@ public class Tile {
 		this.y = y;
 	}
 	
-	public void addUnit(Unit u)  {
+	public boolean setPassability(boolean b) {
+		this.passable = b;
+		return this.passable;
+	}
+	
+	public boolean getPassable() {
+		return this.passable;
+	}
+	
+ 	public void addUnit(Unit u)  {
 		units.add(u);
 	}
 	
@@ -30,7 +39,9 @@ public class Tile {
 	}
 	
 	public String toString() {
-		if (units.isEmpty()) {
+		if (!passable) {
+			return "|";
+		}else if (units.isEmpty()) {
 			return "-";
 		} else {
 			return units.get(0).toString();
@@ -55,15 +66,15 @@ public class Tile {
 	
 	public String drawDir(Tile t) {
 		if (t.getY() > this.y) {
-			return "^";
+			return "v";
 		} else if (t.getX() > this.x) {
 			return "<";
 		} else if (t.getY() <  this.x) {
-			return "v";
+			return "^";
 		} else if (t.getX() < this.x) {
 			return ">";
 		} else {
-			return ".";
+			return "v";
 		}
 	}
 	
