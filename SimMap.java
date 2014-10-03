@@ -65,6 +65,7 @@ public class SimMap {
 	//testing method
 	private String tileNeighbors(ArrayList<Tile> n) {
 		StringBuilder sb = new StringBuilder();
+		
 		for (Tile t : n) {
 			sb.append("(" + t.getX() + "," + t.getY() + ")");
 		}
@@ -77,13 +78,9 @@ public class SimMap {
 			for (int j = 0; j < grid[0].length; j++) {
 				if (grid[i][j].isEqual(start)) {
 					sb.append("S");
-				}
-				
-				if (grid[i][j].isEqual(end)) {
+				}else if (grid[i][j].isEqual(end)) {
 					sb.append("F");
-				}
-				
-				if (cameFrom.containsKey(grid[i][j])) {
+				}else if (cameFrom.containsKey(grid[i][j])) {
 					//if cameFrom is higher prints ^, if cameFrom is lower prints v, so on
 					sb.append(grid[i][j].drawDir(cameFrom.get(grid[i][j])));
 				} else {
@@ -96,24 +93,24 @@ public class SimMap {
 	}
 
 	public static void main(String[] args) {
-		SimMap s = new SimMap(3, 3);
+		SimMap s = new SimMap(10, 10);
 		Bee b = new Bee(s);
 		Hive h = new Hive();
 		s.addUnit(0, 0, b);
 		s.addUnit(2,2,h);
 		
-		//System.out.println(s.drawDepthFirstSearch(b.breadthFirstSearch(s.getGrid()[1][2], s.getGrid()[4][4]), s.getGrid()[1][2], s.getGrid()[4][4]));
-		Stack<Tile> path = b.breadthFirstSearchPath(s.getGrid()[0][0], s.getGrid()[2][2]);
+		System.out.println(s.drawDepthFirstSearch(b.breadthFirstSearch(s.getGrid()[0][0], s.getGrid()[7][8]), s.getGrid()[0][0], s.getGrid()[7][8]));
+		Stack<Tile> path = b.breadthFirstSearchPath(s.getGrid()[0][0], s.getGrid()[7][8]);
 		Tile t = path.pop();
 		StringBuilder sb = new StringBuilder();
+		sb.append(t.printCoord());
+		sb.append(",");
 		while (!path.empty()) {
+			t = path.pop();
 			sb.append(t.printCoord());
 			sb.append(",");
-			t = path.pop();
 		}
 		System.out.println(sb.toString());
-		
-		//testing something with github
 			
 	}
 
