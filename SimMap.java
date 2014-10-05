@@ -130,6 +130,28 @@ public class SimMap {
 		}
 	}
 	
+	public String drawDijkstra(HashMap<Tile, Integer> costs, Tile start, Tile goal) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < grid.length; i++) {
+			for (int j = 0; j < grid[0].length; j++) {
+				if (grid[i][j].isEqual(start)) {
+					sb.append("S");
+				}else if (grid[i][j].isEqual(goal)) {
+					sb.append("F");
+				}else if (costs.containsKey(grid[i][j])) {
+					//if cameFrom is higher prints ^, if cameFrom is lower prints v, so on
+					sb.append(costs.get(grid[i][j]));
+				} else {
+					sb.append(grid[i][j].toString());
+				}
+				
+				sb.append(",");
+			}
+			sb.append("\n");
+		}
+		return sb.toString();
+	}
+	
 	public static void main(String[] args) {
 		SimMap s = new SimMap(10, 10);
 		s.addImpassables();
@@ -142,6 +164,8 @@ public class SimMap {
 		
 		System.out.println(s.drawDepthFirstSearch(b.breadthFirstSearch(start, goal), start, goal));
 		System.out.println(s.getPath(start, goal, b));
+		
+		System.out.println(s.drawDijkstra(b.Dijkstra(start, goal), start, goal));
 		
 			
 	}

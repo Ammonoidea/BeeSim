@@ -1,6 +1,7 @@
 package beeSim;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -50,7 +51,6 @@ public class Bee extends Unit{
 		
 		return cameFrom;
 	}
-	
 	//I shouldn't really use the Java stack...
 	public Stack<Tile> breadthFirstSearchPath(Tile t, Tile goal) {
 		Tile[][] grid = map.getGrid();
@@ -72,32 +72,40 @@ public class Bee extends Unit{
 		return path;
 	}
 	
-	
-	public HashMap<Tile, Tile> Dijkstra(Tile start, Tile goal) {
+	public HashMap<Tile, Integer> Dijkstra(Tile start, Tile goal) {
 		Tile[][] grid = map.getGrid();
-		Queue<Tile> frontier = new ArrayDeque<Tile>();
-		frontier.add(start);
+		SimplePairPriorityQueue<Tile, Integer> frontier = new SimplePairPriorityQueue<Tile, Integer>();
 		HashMap<Tile, Tile> cameFrom = new HashMap<Tile, Tile>();
-		HashSet<Tile> visited = new HashSet<Tile>();
-		Tile current;
+		HashMap<Tile, Integer> costSoFar = new HashMap<Tile, Integer>();
+		
+		frontier.offer(start, 0);
+		cameFrom.put(start, null);
+		costSoFar.put(start, 0);
+		
 		while (!frontier.isEmpty()) {
-			current = frontier.poll();
-			visited.add(current);
+			Tile current = frontier.poll();
 			
-			if (current.isEqual(goal)) {
+			if (current == goal) {
 				break;
 			}
-			//switch this to tile
-			//need to make sure a tile hasn't already been gone to
+			
 			for (Tile next : map.getNeighbors(current.getX(), current.getY())) {
-				if (!visited.contains(next) && next.getPassable()) {
-					frontier.add(next);
+				int newCost = costSoFar.get(current) + next.getCost();
+				if ((!costSoFar.containsKey(next) || newCost < costSoFar.get(next)) && next.getPassable()) {
+					costSoFar.put(next, newCost);
+					int priority = newCost;
+					frontier.offer(next, newCost);
 					cameFrom.put(next, current);
 				}
-				
-			}
+			}	
 		}
+		
+		ArrayList<HashMap<?, ?>> results = new ArrayList<HashMap<?, ?>>();
+		results.add(cameFrom);
+		results.add(costSoFar);
+		return costSoFar;
 	}
+	
 	
 	public static void main(String[] args) {
 

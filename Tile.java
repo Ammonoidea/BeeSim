@@ -7,11 +7,13 @@ public class Tile {
 	private boolean passable = true;
 	private int x;
 	private int y;
+	int cost;
 	
 	public Tile(int x, int y) {
 		units = new ArrayList<Unit>();
 		this.x = x;
 		this.y = y;
+		this.cost = 1;
 	}
 	
 	public Tile(int x, int y, Unit u) {
@@ -19,7 +21,10 @@ public class Tile {
 		units.add(u);
 		this.x = x;
 		this.y = y;
+		this.cost = 1;
 	}
+	
+	
 	
 	public boolean setPassability(boolean b) {
 		this.passable = b;
@@ -28,6 +33,10 @@ public class Tile {
 	
 	public boolean getPassable() {
 		return this.passable;
+	}
+	
+	public int getCost() {
+		return cost;
 	}
 	
  	public void addUnit(Unit u)  {
