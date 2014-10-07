@@ -40,6 +40,32 @@ public class SimMap {
 		}
 	}
 	
+	public void makeForestTestMap() {
+		for (int i = 0; i < grid.length; i++) {
+			for (int j = 0; j < grid[i].length; j++) {
+				if (j > 0 && j < 4 && i > 6 && i < 9) {
+					grid[i][j].setPassability(false);
+				}
+				
+				if (j > 3 && j < 6 && i > 0 && i < 9) {
+					grid[i][j] = new Forest(j, i);
+				}
+				
+				if (j == 3 && i < 6 && i > 3) {
+					grid[i][j] = new Forest(j, i);
+				}
+				
+				if (j == 6 && i < 8 && i > 1) {
+					grid[i][j] = new Forest(j, i);
+				}
+				
+				if (j == 7 && i < 6 && i > 2) {
+					grid[i][j] = new Forest(j,i);
+				}
+			}
+		}
+	}
+	
 	public String toString () {
 		StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < grid.length; i++) {
@@ -152,6 +178,21 @@ public class SimMap {
 		return sb.toString();
 	}
 	
+	public String drawCosts() {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < grid.length; i++) {
+			for (int j = 0; j < grid[0].length; j++) {
+				if (grid[i][j].getPassable()) {
+					sb.append(grid[i][j].getCost());
+				} else {
+					sb.append(grid[i][j].toString());
+				}
+			}
+			sb.append("\n");
+		}
+		return sb.toString();
+	}
+	
 	public static void main(String[] args) {
 		SimMap s = new SimMap(10, 10);
 		s.addImpassables();
@@ -167,6 +208,17 @@ public class SimMap {
 		
 		System.out.println(s.drawDijkstra(b.Dijkstra(start, goal), start, goal));
 		
+		SimMap forest = new SimMap(10,10);
+		forest.makeForestTestMap();
+		b = new Bee(forest);
+		start = forest.getGrid()[0][0];
+		goal = forest.getGrid()[7][8];
+		
+		System.out.println(forest.drawDijkstra(b.Dijkstra(start, goal), start, goal));
+		System.out.println(forest.drawCosts());
+		
+		Tile t = new Forest(1, 2);
+		System.out.println(t.getCost());
 			
 	}
 

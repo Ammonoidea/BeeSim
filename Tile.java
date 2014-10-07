@@ -49,7 +49,7 @@ public class Tile {
 	
 	public String toString() {
 		if (!passable) {
-			return "|";
+			return "@";
 		}else if (units.isEmpty()) {
 			return "-";
 		} else {
